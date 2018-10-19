@@ -1,0 +1,8 @@
+version: '3'
+services:
+  web:
+    image: danidemi/docker-reveal.js:latest
+    ports:
+    - "8000:8000"
+    volumes:
+    - ./slides:/slides

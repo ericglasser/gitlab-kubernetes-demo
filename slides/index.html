@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>From Commit To Production: Using Kubernetes To Create a CI/CD Pipeline.</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>From Commit To Production</h1>
+					<h3>Using Kubernetes To Create a CI/CD Pipeline.</h3>
+					<p>
+						<small>Created by <a  target="_blank" href="https://www.ericglasser.com/">Eric Glasser</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Who Am I?</h2>
+					<div class="fragment">
+						<p>
+							<strong>Day Job:</strong> Principal Container Engineer at
+						</p>
+						<p>
+							<img width="100" data-src="/img/trace3.png" alt="trace3">
+						</p>
+					</div>
+					<p class="fragment">
+							<span class="fragment">Developer Experience Evangelist ...</span>
+							<span class="fragment">Developer ...</span>
+							<span class="fragment">Photographer ...</span>
+							<span class="fragment">Cinefile ...</span>
+							<span class="fragment">Geek ...</span>
+							<span class="fragment">Nerd ...</span>
+					</p>
+				</section>
+
+				<section>
+					<h2>What we are going to cover</h2>
+						<p>
+							<img width="600" data-src="/img/devops.jpg" alt="Devops Kubernetes Gitlab">
+						</p>
+				</section>
+
+				<section>
+						<h2>It all starts with git.</h2>
+						<p>
+							<img width="100" data-src="/img/git.png" alt="git">
+						</p>
+						<ul>
+							<li>Your one source of truth.</li>
+							<li>Pull requests and peer review.</li>
+							<li>Every application change should be tied back to a git commit, branch, or tag.</li>
+							<li>Have a consistent git strategy in your organization.</li>
+							<li>You are never too small for process.</li>
+						</ul>
+					</section>
+
+				<section>
+					<h2>The Application</h2>
+					<p>
+						<strong>Production URL</strong>: <a target="_blank" href="http://cluster.ericglasser.com/">http://cluster.ericglasser.com/</a>
+					</p>
+					<p>
+						<strong>Repository URL:</strong>: <a target="_blank" href="https://gitlab.minerva.io/root/example-go">https://gitlab.minerva.io/root/example-go</a>
+					</p>
+					<p>
+					<strong>Hosted On GKE:</strong> <a target="_blank" href="https://console.cloud.google.com/kubernetes/list?project=develop-denver-talk">https://console.cloud.google.com/kubernetes/list?project=develop-denver-talk</a>
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>CI/CD What is the difference?</h2>
+					</section>
+					<section>
+						<h2>Continuous Integration</h2>
+						<p>
+							A development practice that requires developers to integrate code into a shared repository several times a day. Each check-in is then verified by an automated build, allowing teams to detect problems early.
+						</p>
+					</section>
+					<section>
+						<h2>Continuous Deployment</h2>
+						<p>
+							It can be thought of as an extension of continuous integration, aiming at minimizing lead time, the time elapsed between development writing one new line of code and this new code being used by live users, in production.
+						</p>
+					</section>
+					<section>
+						<h2>Continuous Delivery</h2>
+						<p>
+							A software engineering approach in which teams produce software in short cycles, ensuring that the software can be reliably released at any time and, when releasing the software, doing so manually.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>What is a Gitlab Runner</h2>
+						<p>
+							An Open source project that is used to run your jobs and send the results back to GitLab. It is used in conjunction with GitLab CI, the open-source continuous integration service included with GitLab that coordinates the jobs.
+						</p>
+					</section>
+					<section>
+						<h2>Where do they run?</h2>
+						<p>
+							<img height="300" data-src="/img/docker.png" alt="Docker">
+							<img height="300" data-src="/img/kubernetes.png" alt="Kubernetes">
+						</p>
+					</section>
+				</section>
+
+				<section>
+						<section>
+							<h2>Connecting Kubernetes To Our Project</h2>
+							<p>
+								<a target="_blank" href="https://gitlab.minerva.io/root/example-go/clusters">Our Example Go Page</a>
+							</p>
+						</section>
+						<section>
+							<h2>Configuring Our Cluster</h2>
+							<p>
+								Cluster Name: <pre><code>develop-denver</code></pre>
+								API URL: <pre><code>https://35.238.52.64</code></pre>
+							</p>
+						</section>
+					</section>
+				
+					<section>
+						<h2>Register Kubernetes As A runner</h2>
+						<a target="_blank" href="https://gitlab.minerva.io/admin/runners">Check The Runners</a>
+					</section>
+
+					<section>
+							<h2>Review Apps</h2>
+							<p>
+								<img height="300" data-src="/img/review-apps.svg" alt="Kubernetes">
+							</p>
+							<p>
+								<small><a href="https://docs.gitlab.com/ee/ci/review_apps/">More Info</a></small>
+							</p>
+					</section>
+					<section>
+							<h2>Review Apps</h2>
+							<p>
+								<img height="300" data-src="/img/review-apps.svg" alt="Kubernetes">
+							</p>
+							<p>
+								<small><a href="https://docs.gitlab.com/ee/ci/review_apps/">More Info</a></small>
+							</p>
+					</section>
+					<section>
+							<h2>Open a Pull Request</h2>
+							<p>
+								Lets create a hello Colorado Modification
+							</p>
+					</section>
+					<section>
+							<section>
+
+							</section>
+								<h2>Review on stage</h2>
+								<p>
+									Checking Production<a target="_blank" href="http://stage.cluster.ericglasser.com/">http://stacluster.ericglasser.com/</a>
+								</p>
+							<section>
+									<h2>We are in production</h2>
+									<p>
+										Checking Production<a target="_blank" href="http://cluster.ericglasser.com/">http://cluster.ericglasser.com/</a>
+									</p>	
+							</section>
+					</section>
+					<section>
+						<h2>Thank You</h2>
+						<p>
+							<strong>This Project:</strong> <a href="https://github.com/ericglasser/gitlab-kubernetes-demo">https://github.com/ericglasser/gitlab-kubernetes-demo</a>
+						</p>
+						<h3>My Other Projects</h3>
+						<p>
+							<strong>Developer Death March:</strong> <a href="https://developerdeathmarch.com/">https://developerdeathmarch.com/</a>
+						</p>
+						<p>
+							<strong>Minerva:</strong> <a href="https://minerva.io/">https://minerva.io/</a>
+						</p>
+						<h3>Social</h3>
+						<p>
+							<strong>Twitter:</strong> <a href="https://twitter.com/ericglasser">https://twitter.com/ericglasser</a>
+						</p>
+						<p>
+							<strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/ericglasser/">https://www.linkedin.com/in/ericglasser/</a>
+						</p>
+
+					</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
